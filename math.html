@@ -33,28 +33,33 @@
             border-radius: 10px;
             box-shadow: 2px 2px 8px rgba(0,0,0,0.12);
         }
+
+        /* 列表容器：使用 flex column，但不要依赖 gap（兼容老版 iOS） */
         .mov-list {
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: center; /* 默认居中，每个 .mov 有自己的 max-width */
             width: 100%;
         }
+
+        /* 每个按钮块 */
         .mov {
             width: 100%;
-            max-width: 720px;
-            margin: 0 auto 14px;
+            max-width: 720px; /* 限制宽度以在大屏上居中显示 */
+            margin: 0 auto 14px; /* 下外边距替代 gap，保证 iOS 上的间距 */
             background: #3E70B1;
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: transform 180ms ease, box-shadow 180ms ease, background-color 200ms ease;
+            transition: transform 180ms ease, box-shadow 180ms ease;
             -webkit-tap-highlight-color: transparent;
             -webkit-backface-visibility: hidden;
             min-height: 56px;
             padding: 6px;
         }
         .mov:last-child { margin-bottom: 0; }
+
         .mov a {
             color: white;
             text-decoration: none;
@@ -67,12 +72,10 @@
             letter-spacing: 0.2px;
             margin: 0 auto;
             box-sizing: border-box;
-            transition: color 160ms ease;
         }
-        .mov:hover { box-shadow: 0 6px 18px rgba(62,112,177,0.18); background-color: #335f97; }
         .mov:active { transform: translateY(1px); }
-        .mov a:hover { color: #ffffff; }
-        .mov a:focus { outline: 3px solid rgba(51,95,155,0.2); outline-offset: 2px; border-radius: 8px; }
+        .mov:hover { box-shadow: 0 6px 18px rgba(62,112,177,0.18); }
+
         .foot {
             width: 100%;
             padding: 12px 16px;
@@ -83,6 +86,8 @@
             border-top-right-radius: 6px;
             margin-top: 16px;
         }
+
+        /* 大屏（桌面） */
         @media (min-width: 1025px) {
             .title { font-size: 1.8rem; padding-top: 28px; }
             .card { width: 70%; padding: 28px; margin-top: 28px; border-radius: 8px; }
@@ -91,6 +96,8 @@
             .mov-list { align-items: center; }
             .foot { position: fixed; bottom: 0; left: 0; width: 100%; padding: 12px 0; }
         }
+
+        /* 平板 */
         @media (min-width: 769px) and (max-width: 1024px) {
             .title { font-size: 1.7rem; }
             .card { width: 80%; padding: 24px; }
@@ -98,19 +105,24 @@
             .mov a { font-size: 1.15rem; padding: 15px; }
             .foot { position: fixed; bottom: 0; left: 0; width: 100%; }
         }
+
+        /* 手机（安卓 / iPhone）— 小屏时按钮铺满宽度 */
         @media (max-width: 768px) {
             .title { font-size: 1.4rem; padding-top: 18px; }
             .card { width: 94%; padding: 16px; margin-top: 12px; border-radius: 10px; }
             .mov { max-width: 100%; margin: 0 0 12px 0; border-radius: 12px; min-height: 56px; }
             .mov a { font-size: 1rem; padding: 14px; }
-            .mov-list { align-items: stretch; }
+            .mov-list { align-items: stretch; } /* 小屏上按钮填满容器 */
             .foot { position: static; margin-top: 12px; border-radius: 8px; }
         }
+
         @media (max-width: 400px) {
             .title { font-size: 1.2rem; padding-top: 14px; }
             .mov a { font-size: 0.98rem; padding: 12px; }
             .card { padding: 14px; }
         }
+
+        /* 针对支持 -webkit-overflow-scrolling 的设备微调间距（可选） */
         @supports (-webkit-overflow-scrolling: touch) {
             .mov { margin-bottom: 14px; }
         }
@@ -123,17 +135,17 @@
     <div class="card">
         <div class="mov-list">
             <div class="mov">
-                <a href="https://easylink.cc/4zrqel" target="_blank" rel="noopener noreferrer">ab=a•b</a>
+                <a href="https://link.jiyiho.cn/orfile/view.php/844c1e99289b8b0429049a1adc062dfd.mov" target="_blank" rel="noopener noreferrer">ab=a•b</a>
             </div>
             <div class="mov">
-                <a href="https://easylink.cc/wspiik" target="_blank" rel="noopener noreferrer">1+1=5</a>
+                <a href="https://link.jiyiho.cn/orfile/view.php/520632302565b3b5f164b66f5d5df67d.mov">1+1=5</a>
             </div>
             <div class="mov">
-                <a href="https://easylink.cc/7mdwc0" target="_blank" rel="noopener noreferrer">a+b=a+b</a>
+                <a href="https://link.jiyiho.cn/orfile/view.php/37409802bdafe36b804dddf71f4905cc.mov">a+b=a+b</a>
             </div>
         </div>
         <div class="foot">
-            版本:v1.0.3
+            版本:v1.0.7
             <br>
             Project maintained by yhz-123
         </div>
