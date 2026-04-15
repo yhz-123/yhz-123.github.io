@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>我的AI助手</title>
+    <style>
+        /* 简单美化一下界面，让它像个聊天软件 */
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 20px auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px; }
+        .chat-box { height: 400px; overflow-y: auto; border: 1px solid #eee; padding: 10px; margin-bottom: 10px; border-radius: 5px; }
+        .input-area { display: flex; }
+        #input { flex-grow: 1; padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 5px 0 0 5px; }
+        button { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 0 5px 5px 0; cursor: pointer; }
+        .message { margin: 10px 0; padding: 8px 12px; border-radius: 15px; max-width: 70%; }
+        .user { background: #007bff; color: white; margin-left: auto; }
+        .ai { background: #e9ecef; color: #333; margin-right: auto; }
+    </style>
+</head>
+<body>
+
+<div class="chat-box" id="chatBox">
+    <div class="message ai">你好！我是你的AI助手，有什么可以帮你的吗？</div>
+</div>
+
+<div class="input-area">
+    <input type="text" id="input" placeholder="输入你的问题...">
+    <button onclick="sendMessage()">发送</button>
+</div>
+
+<script>
+    // 1. 配置你的信息
+    const API_URL = "https://557d8v36y3.coze.site/stream_run";
+    const API_TOKEN = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjlkOGYxNGZiLTM3M2MtNDRjMS1hZTJjLTcxMmRkMDk3OWFiYyJ9.eyJpc3MiOiJodHRwczovL2FwaS5jb3plLmNuIiwiYXVkIjpbIkVkbXlUTHg0YWtrNmxZWXZ1d2ZjeUg4dWd6cjFlRnJhIl0sImV4cCI6ODIxMDI2Njg3Njc5OSwiaWF0IjoxNzc2MjU1NDI1LCJzdWIiOiJzcGlmZmU6Ly9hcGkuY296ZS5jbi93b3JrbG9hZF9pZGVudGl0eS9pZDo3NjI4OTIxMDU2MjYyMDk0ODU4Iiwic3JjIjoiaW5ib3VuZF9hdXRoX2FjY2Vzc190b2tlbl9pZDo3NjI4OTU4OTU5OTU2NjU2MTM3In0.xUKO6ezVmIU2DQm9JHVz2GULSduKJf6zlkr4aBDWpKVwDObtpXqoxNvdVwftwL6uIkjJT_Q4I5CIAr_QN_nyeWgZDIJi05wf5hDlbp3M7Q6MySZaLSKnBN9x2oSB6ilu0lIxo_AzgCEIa2OBSSRi8qI46X1THWhnltOQh072A4hF3b3kqluB1OV8srTjFb358imeasKeCgFx7EVEwTqnLq-oz5RRpjfgmdBceacU6EGwGgonB6r_VwyaTpx-tYrUUN7cEO_9buvF8kuOG3J_Q1RhzeUzSSdLMYHvoVu-AA9mK6Vkif_kmrs3OJZ7OL0-noR2Y6QsrhzRA7CB4ut8Bw"; // <--- 这里改成你的真实 Token
+    const SESSION_ID = "LbUz-gIcIbLiHgUZvGjE-";
+    const PROJECT_ID = 7628916986965377033;
+
+    // 2. 发送消息的函数
+    async function sendMessage() {
+        const input = document.getElementById("input");
+        const userText = input.value.trim();
+        if (!userText) return;
+
+        // 显示用户的消息
+        appendMessage(userText, "user");
+        input.value = ""; // 清空输入框
+
+        try {
+            // 3. 调用你提供的 API (核心代码)
+            const response = await fetch(API_URL, {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${API_TOKEN}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    content: { query: { prompt: [{ type: "text", content: { text: userText } }] } },
+                    type: "query",
+                    session_id: SESSION_ID,
+                    project_id: PROJECT_ID
+                })
+            });
+
+            if (!response.ok) throw new Error("网络请求失败");
+            
+            // 因为是流式输出，我们需要一点点读取结果
+            const data = await response.json();
+            // 假设返回结果在 data.data.content 里，根据你的实际结构调整
+            const aiResponse = data.data?.content || "抱歉，我没听懂...";
+            
+            appendMessage(aiResponse, "ai");
+        } catch (error) {
+            appendMessage("出错了：" + error.message, "ai");
+            console.error(error);
+        }
+    }
+
+    // 辅助函数：在聊天框添加消息
+    function appendMessage(text, sender) {
+        const chatBox = document.getElementById("chatBox");
+        const div = document.createElement("div");
+        div.className = `message ${sender}`;
+        div.innerText = text;
+        chatBox.appendChild(div);
+        chatBox.scrollTop = chatBox.scrollHeight; // 自动滚到底部
+    }
+</script>
+
+</body>
+</html>
